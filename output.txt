@@ -1,5 +1,0 @@
-VAR, VAR 
-a, identificador 
-,, simb_virgula 
-b, identificador 
-;, simb_ponto_virgula 

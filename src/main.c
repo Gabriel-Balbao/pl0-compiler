@@ -11,6 +11,9 @@ static const char reserved_words[NUM_RESERVED_WORDS][MAX_RESERVED_WORD_LENGHT] =
     "CALL", "WHILE", "DO", "ODD", "IF", "THEN"
 };
 
+// hashTable is a global variable
+HashNode** hashTable = NULL;
+
 /**
  * @brief Checks if the input string is a reserved word
  * @param word input string
@@ -220,22 +223,8 @@ void syntatic_analyser(char* input_file_name, char* automata_path){
 	// Load transition table representing the automata
 	Transition **transition_matrix = csv_parser(automata_path);
 	
-	// Execution Loop
-	while(1){
-		// Execute lexical analyser
-		LexicalOutput lexical_output = lexical_analyser(input_file, transition_matrix);
-		
-		// Reached EOF
-		if(lexical_output.end){
-			printf("\n========== END OF FILE REACHED! ========= \n");
-
-			// Frees memory
-			free_memory(transition_matrix);
-			break;
-		}
-		// outputs lexical analysis to text file
-		if(strlen(lexical_output.token) > 0) fprintf(output_file, "%s, %s \n", lexical_output.token, lexical_output.class);
-	}
+	// Starts analysis from programa
+	programa(input_file, transition_matrix);
 
 	// Closes input file
 	fclose(input_file);
@@ -250,19 +239,15 @@ void main(int argc, char** argv){
 		exit(1);
 	}
 
-	HashNode* hashTable[HASH_SIZE];
+	hashTable = calloc(sizeof(HashNode*), HASH_SIZE);
+	// Insert FIRST and FOLLOW sets into the hash table
+    insert_first_follow();
 
 	// Defines the input as the name of the input file
 	char *input_file_name = argv[1];
 	// Defines the automata transition table's file path
 	char automata_path[] = "./data/transition_matrix.csv";
 
-	printf("\n========== Loading table! ========= \n\n");
-	memset(hashTable, 0, sizeof(hashTable));
-
-    // Insert FIRST and FOLLOW sets into the hash table
-    insert_first_follow(hashTable);
-	
 	printf("\n========== STARTING ANALYSIS! ========= \n\n");
 
 	Transition **transition_matrix = csv_parser(automata_path);
@@ -275,7 +260,5 @@ void main(int argc, char** argv){
 	}
 
 	// Starts syntatic analysis
-	//syntatic_analyser(input_file_name, automata_path);
-	FirstFollowSet *data = hash_get(hashTable, "<variavel>");
-	variavel(input_file, transition_matrix, *data, hashTable);
+	syntatic_analyser(input_file_name, automata_path);
 }

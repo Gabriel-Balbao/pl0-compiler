@@ -59,9 +59,9 @@ Transition** csv_parser(char* input_file_name);
 //Hash table 
 
 typedef struct {
-    char first[MAX_SYMBOLS][MAX_NAME_LEN];
+    char **first;
     int firstCount;
-    char follow[MAX_SYMBOLS][MAX_NAME_LEN];
+    char **follow;
     int followCount;
 } FirstFollowSet;
 
@@ -71,9 +71,12 @@ typedef struct HashNode {
     struct HashNode* next;
 } HashNode;
 
-int insert_first_follow(HashNode* hashTable[]);
+extern HashNode** hashTable;
+//extern Transition** transition_matrix;
 
-FirstFollowSet* hash_get(HashNode* hashTable[], const char *key);
+int insert_first_follow();
+
+FirstFollowSet* hash_get(const char *key);
 
 // Lexical Analysis
 LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix);
@@ -81,6 +84,21 @@ void return_token(FILE *input_file, LexicalOutput returned_token); // New functi
 void free_memory(Transition** transition_matrix);
 
 // Syntatic Analysis
-void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet data, HashNode* hashTable[]);
-
-void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet data, HashNode* hashTable[]);
+void programa(FILE *input_file, Transition** transition_matrix);
+void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void declaracao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void constante(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void mais_cmd(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void operador_unario(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void termo(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void mais_termos(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void fator(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void mais_fatores(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void condicao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
+void relacional(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers);
