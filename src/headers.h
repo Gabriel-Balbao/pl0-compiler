@@ -6,6 +6,7 @@
 #define ASCII_EXTENDED_SIZE 256
 #define MAX_TOKEN_LENGHT 256
 #define MAX_SET_SIZE 20
+#define MAX_TOKENS 1000
 
 #define MAX_SYMBOLS 20
 #define MAX_NAME_LEN 50
@@ -14,6 +15,7 @@
 // Mealy's machine state
 typedef struct {
         int number;
+        int is_error;
         int is_final;
 } State;
 
@@ -29,6 +31,7 @@ typedef struct {
 	char token[MAX_TOKEN_LENGHT];
 	char class[MAX_TOKEN_LENGHT];
 	int end;
+    int is_error;
 } LexicalOutput;
 
 typedef struct {
@@ -44,15 +47,6 @@ typedef struct {
 #define MAX_NON_TERMINALS 50
 #define MAX_TERMINALS 50
 
-// Structure for O(1) access to First and Follow sets
-// Assumes non-terminals and terminals are mapped to integer IDs (0 to MAX_NON_TERMINALS-1 or MAX_TERMINALS-1)
-typedef struct {
-    // first_set[non_terminal_id][terminal_id] is true if terminal_id is in FIRST(non_terminal_id)
-    bool first_set[MAX_NON_TERMINALS][MAX_TERMINALS];
-
-    // follow_set[non_terminal_id][terminal_id] is true if terminal_id is in FOLLOW(non_terminal_id)
-    bool follow_set[MAX_NON_TERMINALS][MAX_TERMINALS];
-} ParsingTables;
 
 Transition** csv_parser(char* input_file_name);
 
@@ -82,6 +76,8 @@ FirstFollowSet* hash_get(const char *key);
 LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix);
 void return_token(FILE *input_file, LexicalOutput returned_token); // New function declaration
 void free_memory(Transition** transition_matrix);
+
+void init_token_capture();
 
 // Syntatic Analysis
 void programa(FILE *input_file, Transition** transition_matrix);

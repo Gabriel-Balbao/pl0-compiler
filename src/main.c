@@ -52,6 +52,7 @@ LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix)
 	// Loops while the char read is different from EOF
 	while((char_consumed = fgetc(input_file)) != EOF){
 		Transition current_transition = transition_matrix[current_state.number][(unsigned char) char_consumed];
+		lexical_output.is_error = current_transition.next_state.is_error;
 
 		if(current_transition.next_state.is_final){
 			switch(current_transition.num_outputs){
@@ -129,16 +130,10 @@ LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix)
 
 	lexical_output.end = 1;
 	// If EOF is reached and capture_output has content, it might be the last token.
-	// This logic might need to be adjusted based on FSM design for EOF.
 	if (capture_output[0] != '\0' && lexical_output.token[0] == '\0') {
-	    // This is a guess; FSM should ideally define how EOF finalizes tokens.
-	    // Assuming the class should be 'identificador' or 'numero' if not reserved.
-	    // This part is speculative and depends heavily on your FSM's design for EOF.
 	    if(check_if_reserved_word(capture_output)) {
 			strcpy(lexical_output.class, capture_output);
 		} else {
-		    // Heuristic: if it looks like a number, class is numero, else identificador
-		    // This is a simplification. Your FSM should define this.
 		    bool is_num = true;
 		    for (int i = 0; capture_output[i] != '\0'; i++) {
 		        if (!isdigit(capture_output[i])) {
@@ -258,6 +253,8 @@ void main(int argc, char** argv){
 		printf("Error: Unable to open input file!\n");
 		exit(1);
 	}
+
+	init_token_capture();
 
 	// Starts syntatic analysis
 	syntatic_analyser(input_file_name, automata_path);

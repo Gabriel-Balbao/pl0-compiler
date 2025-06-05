@@ -180,11 +180,16 @@ Transition** csv_parser(char* file_name){
 		// Gets if the next state is final
 		int next_state_is_final = atoi(strtok(NULL, ","));
 
+		//Gets if next state is an error state
+		int next_state_is_error = atoi(strtok(NULL, ","));
+
+
 		// Generates a new transition with the information receives
 		Transition new_transition;	
 		new_transition.num_outputs = num_outputs;
 		new_transition.next_state.number = next_state;
 		new_transition.next_state.is_final = next_state_is_final;
+		new_transition.next_state.is_error = next_state_is_error;
 
 		// If the input string is a single char, simply sets the output and stores the transition in the table
 		if(strlen(symbol) == 1){

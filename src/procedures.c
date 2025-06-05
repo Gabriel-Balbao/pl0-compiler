@@ -3,12 +3,15 @@
 #include <string.h>
 #include "headers.h"
 
-LexicalOutput get_token(FILE *input_file, Transition** transition_matrix){
-	LexicalOutput current_token;
-	while(1){
-		current_token = lexical_analyser(input_file, transition_matrix);
-		if(strcmp(current_token.token, "")) return current_token;
-	}
+char *capture_tokens;
+
+void init_token_capture(){
+    capture_tokens = malloc(MAX_TOKENS * sizeof(char*));
+}
+
+void free_token_capture() {
+    free(capture_tokens);
+    capture_tokens = malloc(MAX_TOKENS * sizeof(char*));
 }
 
 FirstFollowSet add_follow(FirstFollowSet data, char **symbol, int num_symbols) {
@@ -63,10 +66,17 @@ void readToken(FILE *input_file, Transition** transition_matrix) {
         printf("Unexpected end of file reached\n");
         exit(0);
     }
+    if(current_token.is_error){
+        printf("Lexical error: %s - %s\n", current_token.token, current_token.class);
+    }else{
+        strcat(capture_tokens, " ");
+        strcat(capture_tokens, current_token.token);
+    }
     printf("%s\n", current_token.token);
 }
 
 void print_error(char** expected, int num_expected) {
+    printf("%s - ", capture_tokens);
     printf("Syntatic error: expected {");
     for(int i = 0; i < num_expected - 1; i++) {
         printf("\"%s\", ", expected[i]);
@@ -111,6 +121,7 @@ void programa(FILE *input_file, Transition** transition_matrix) {
 }
 
 void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou bloco\n");
     FirstFollowSet followers;
 
@@ -125,6 +136,7 @@ void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet pare
 }
 
 void declaracao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou declaracao\n");
     FirstFollowSet followers;
 
@@ -277,6 +289,7 @@ void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet
 }
 
 void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou variavel\n");
     FirstFollowSet followers;
 
@@ -361,6 +374,7 @@ void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
 }
 
 void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou procedimento\n");
     FirstFollowSet followers;
 
@@ -429,6 +443,7 @@ void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowS
 }
 
 void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou comando\n");
     FirstFollowSet followers;
 
@@ -462,6 +477,7 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
             followers = parent_followers;
             error(input_file, transition_matrix, convert("identificador"), 1, followers);
         }
+        readToken(input_file, transition_matrix);
     }
     // Checks if token is "BEGIN"
     else if(!strcmp(current_token.class, "BEGIN")) {
@@ -571,6 +587,7 @@ void mais_cmd(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
 }
 
 void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     printf("Entrou expressao\n");
     FirstFollowSet followers;
 
