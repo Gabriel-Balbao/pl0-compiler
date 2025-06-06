@@ -3,15 +3,18 @@
 #include <string.h>
 #include "headers.h"
 
+LexicalOutput current_token;
+
 char *capture_tokens;
 
 void init_token_capture(){
-    capture_tokens = malloc(MAX_TOKENS * sizeof(char*));
+    capture_tokens = malloc(MAX_TOKENS * sizeof(char));
 }
 
 void free_token_capture() {
     free(capture_tokens);
-    capture_tokens = malloc(MAX_TOKENS * sizeof(char*));
+    capture_tokens = malloc(MAX_TOKENS * sizeof(char));
+    strcpy(capture_tokens, current_token.token);
 }
 
 FirstFollowSet add_follow(FirstFollowSet data, char **symbol, int num_symbols) {
@@ -59,7 +62,6 @@ int is_in_first_set(FirstFollowSet* data, const char *symbol) {
     return 0; // Symbol not found in follow set
 }
 
-LexicalOutput current_token;
 void readToken(FILE *input_file, Transition** transition_matrix) {
     current_token = lexical_analyser(input_file, transition_matrix);
     if(current_token.end) {
@@ -72,7 +74,7 @@ void readToken(FILE *input_file, Transition** transition_matrix) {
         strcat(capture_tokens, " ");
         strcat(capture_tokens, current_token.token);
     }
-    printf("%s\n", current_token.token);
+    //printf("%s\n", current_token.token);
 }
 
 void print_error(char** expected, int num_expected) {
@@ -102,7 +104,7 @@ char** convert(char string[]) {
 }
 
 void programa(FILE *input_file, Transition** transition_matrix) {
-    printf("Entrou programa\n");
+    //printf("Entrou programa\n");
     // Sets initial follower list
     FirstFollowSet followers = *hash_get("<programa>");
 
@@ -117,12 +119,12 @@ void programa(FILE *input_file, Transition** transition_matrix) {
         error(input_file, transition_matrix, convert("simb_ponto"), 1, followers);
         // There isn't much to check in respect to this error
     }
-    printf("Saiu programa\n");
+    //printf("Saiu programa\n");
 }
 
 void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou bloco\n");
+    //printf("Entrou bloco\n");
     FirstFollowSet followers;
 
     // Recursion, calling declaracao
@@ -132,12 +134,12 @@ void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet pare
     // Recursion, calling comando
     followers = parent_followers;
     comando(input_file, transition_matrix, followers);
-    printf("Saiu bloco\n");
+    //printf("Saiu bloco\n");
 }
 
 void declaracao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou declaracao\n");
+    //printf("Entrou declaracao\n");
     FirstFollowSet followers;
 
     // Recursion, calling constante
@@ -151,11 +153,12 @@ void declaracao(FILE *input_file, Transition** transition_matrix, FirstFollowSet
     // Recursion, calling procedimento
     followers = parent_followers;
     procedimento(input_file, transition_matrix, followers);
-    printf("Saiu declaracao\n");
+    //printf("Saiu declaracao\n");
 }
 
 void constante(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou constante\n");
+    //free_token_capture();
+    //printf("Entrou constante\n");
     FirstFollowSet followers;
 
     // Checks if token is "CONST"
@@ -221,11 +224,12 @@ void constante(FILE *input_file, Transition** transition_matrix, FirstFollowSet 
         followers = parent_followers;
         error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
     }
-    printf("Saiu constante\n");
+    //printf("Saiu constante\n");
 }
 
 void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("entrou mais_const\n");
+    //free_token_capture();
+    //printf("entrou mais_const\n");
     FirstFollowSet followers;
 
     // Checks if token is "simb_virgula"
@@ -285,12 +289,12 @@ void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet
     // Recursion, calling mais_const
     followers = parent_followers;
     mais_const(input_file, transition_matrix, followers);
-    printf("Saiu mais_const\n");
+    //printf("Saiu mais_const\n");
 }
 
 void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou variavel\n");
+    //printf("Entrou variavel\n");
     FirstFollowSet followers;
 
     // Checks if token is "VAR"
@@ -332,11 +336,12 @@ void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
     }
 
     readToken(input_file, transition_matrix);
-    printf("Saiu variavel\n");
+    //printf("Saiu variavel\n");
 }
 
 void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou mais_var\n");
+    free_token_capture();
+    //printf("Entrou mais_var\n");
     FirstFollowSet followers;
 
     // Checks if token is "simb_virgula"
@@ -370,12 +375,12 @@ void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
     // Recursion, calling mais_var
     followers = parent_followers;
     mais_var(input_file, transition_matrix, followers);
-    printf("Saiu mais_var\n");
+    //printf("Saiu mais_var\n");
 }
 
 void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou procedimento\n");
+    // printf("Entrou procedimento\n");
     FirstFollowSet followers;
 
     // Checks if token is "PROCEDURE"
@@ -439,12 +444,12 @@ void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowS
     // Recursion, calling procedimento
     followers = parent_followers;
     procedimento(input_file, transition_matrix, followers);
-    printf("Saiu procedimento\n");
+    //printf("Saiu procedimento\n");
 }
 
 void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou comando\n");
+    //printf("Entrou comando\n");
     FirstFollowSet followers;
 
     // Checks if token is "identificador"
@@ -551,14 +556,15 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
     }
     // Considers it lambda
     else {
-        printf("Saiu comando\n");
+      //  printf("Saiu comando\n");
         return;
     }
-    printf("Saiu comando\n");
+    //printf("Saiu comando\n");
 }
 
 void mais_cmd(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou mais_cmd\n");
+    //printf("Entrou mais_cmd\n");
+    free_token_capture();
     FirstFollowSet followers;
 
     // Checks if token is "simb_ponto_virgula"
@@ -583,12 +589,12 @@ void mais_cmd(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
     // Recursion, calling comando
     followers = parent_followers;
     mais_cmd(input_file, transition_matrix, followers);
-    printf("Saiu mais_cmd\n");
+    //printf("Saiu mais_cmd\n");
 }
 
 void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    printf("Entrou expressao\n");
+    //printf("Entrou expressao\n");
     FirstFollowSet followers;
 
     // Recursion, calling operador_unario
@@ -602,24 +608,26 @@ void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet 
     // Recursion, calling mais_termos
     followers = parent_followers;
     mais_termos(input_file, transition_matrix, followers);
-    printf("Saiu expressao\n");
+    //printf("Saiu expressao\n");
 }
 
 void operador_unario(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou operador_unario\n");
+    free_token_capture();
+    //printf("Entrou operador_unario\n");
     if(strcmp(current_token.class, "simb_mais") == 0)
         readToken(input_file, transition_matrix);
     else if(strcmp(current_token.class, "simb_menos") == 0)
         readToken(input_file, transition_matrix);
     else {
-        printf("Saiu operador_unario\n");
+        //printf("Saiu operador_unario\n");
         return; // lambda
     }
-    printf("Saiu operador_unario\n");
+    //printf("Saiu operador_unario\n");
 }
 
 void termo(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou termo\n");
+    free_token_capture();
+    //printf("Entrou termo\n");
     FirstFollowSet followers;
 
     // Recursion, calling fator
@@ -629,11 +637,12 @@ void termo(FILE *input_file, Transition** transition_matrix, FirstFollowSet pare
     // Recursion, calling mais_fatores
     followers = parent_followers;
     mais_fatores(input_file, transition_matrix, followers);
-    printf("Saiu termo\n");
+    //printf("Saiu termo\n");
 }
 
 void mais_termos(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou mais_termos\n");
+    free_token_capture();
+    //printf("Entrou mais_termos\n");
     FirstFollowSet followers;
 
     if(strcmp(current_token.class, "simb_mais") == 0) {
@@ -663,7 +672,8 @@ void mais_termos(FILE *input_file, Transition** transition_matrix, FirstFollowSe
 }
 
 void fator(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
-    printf("Entrou fator\n");
+    free_token_capture();
+    //printf("Entrou fator\n");
     FirstFollowSet followers;
 
     if(strcmp(current_token.class, "identificador") == 0) {
@@ -695,6 +705,7 @@ void fator(FILE *input_file, Transition** transition_matrix, FirstFollowSet pare
 }
 
 void mais_fatores(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     FirstFollowSet followers;
 
     if(strcmp(current_token.class, "simb_mult") == 0) {
@@ -724,6 +735,7 @@ void mais_fatores(FILE *input_file, Transition** transition_matrix, FirstFollowS
 }
 
 void condicao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     FirstFollowSet followers;
 
     // Checks if token is "ODD"
@@ -750,6 +762,7 @@ void condicao(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
 }
 
 void relacional(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
+    free_token_capture();
     FirstFollowSet followers;
 
     if(strcmp(current_token.class, "simb_igual") == 0) {

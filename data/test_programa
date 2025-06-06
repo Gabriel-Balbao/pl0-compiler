@@ -1,5 +1,5 @@
 VAR n, fat;
-PROCEDURE 1fatorial :;
+PROCEDURE fatorial;
 BEGIN
 fat:=1;
 WHILE n>1 DO
