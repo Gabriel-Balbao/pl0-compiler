@@ -78,6 +78,7 @@ void readToken(FILE *input_file, Transition** transition_matrix) {
 }
 
 void print_error(char** expected, int num_expected) {
+    printf("Line: %d\n", current_token.line);
     printf("%s - ", capture_tokens);
     printf("Syntatic error: expected {");
     for(int i = 0; i < num_expected - 1; i++) {

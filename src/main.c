@@ -14,6 +14,8 @@ static const char reserved_words[NUM_RESERVED_WORDS][MAX_RESERVED_WORD_LENGHT] =
 // hashTable is a global variable
 HashNode** hashTable = NULL;
 
+int line_count = 1;
+
 /**
  * @brief Checks if the input string is a reserved word
  * @param word input string
@@ -51,6 +53,8 @@ LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix)
 
 	// Loops while the char read is different from EOF
 	while((char_consumed = fgetc(input_file)) != EOF){
+		if(char_consumed == '\n') line_count++;
+	
 		Transition current_transition = transition_matrix[current_state.number][(unsigned char) char_consumed];
 		lexical_output.is_error = current_transition.next_state.is_error;
 
@@ -116,7 +120,8 @@ LexicalOutput lexical_analyser(FILE *input_file, Transition** transition_matrix)
                 // The 'continue' will fetch the next character.
                 continue; 
             }
-
+			
+			lexical_output.line = line_count;
 			return lexical_output;
 		}
 		else{

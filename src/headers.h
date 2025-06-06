@@ -32,6 +32,7 @@ typedef struct {
 	char class[MAX_TOKEN_LENGHT];
 	int end;
     int is_error;
+    int line;
 } LexicalOutput;
 
 typedef struct {
