@@ -173,59 +173,65 @@ void constante(FILE *input_file, Transition** transition_matrix, FirstFollowSet 
             print_error("identificador"), 1);
             return;
         }*/
+    }else{
+
+        readToken(input_file, transition_matrix);
+
+        // Checks if token is "identificador"
+        if(strcmp(current_token.class, "identificador")) {
+            followers = add_follow(parent_followers, convert("simb_igual"), 1);
+            error(input_file, transition_matrix, convert("identificador"), 1, followers);
+            // Checks if follower found belongs to parent
+            if(is_in_follow_set(&parent_followers, current_token.class)) {
+                print_error(convert("simb_igual"), 1);
+                return;
+            }
+        }else{
+
+            readToken(input_file, transition_matrix);
+
+            // Checks if token is "simb_igual"
+            if(strcmp(current_token.class, "simb_igual")) {
+                followers = add_follow(parent_followers, convert("numero"), 1);
+                error(input_file, transition_matrix, convert("simb_igual"), 1, followers);
+                // Checks if follower found belongs to parent
+                if(is_in_follow_set(&parent_followers, current_token.class)) {
+                    print_error(convert("numero"), 1);
+                    return;
+                }
+            }else{
+
+                readToken(input_file, transition_matrix);
+
+                // Checks if token is "numero"
+                if(strcmp(current_token.class, "numero")) {
+                    followers = add_follow(parent_followers, hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
+                    error(input_file, transition_matrix, convert("numero"), 1, followers);
+                    // Checks if follower found belongs to parent
+                    if(is_in_follow_set(&parent_followers, current_token.class)) {
+                        print_error(hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
+                        return;
+                    }
+                }else {
+
+                readToken(input_file, transition_matrix);
+
+                // Recursion, calling mais_const
+                followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
+                mais_const(input_file, transition_matrix, followers);
+
+                // Checks if token is "simb_ponto_virgula"
+                if(strcmp(current_token.class, "simb_ponto_virgula")) {
+                    followers = parent_followers;
+                    error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
+                }
+
+            }
+                }
+            }
+        //printf("Saiu constante\n");
+        
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "identificador"
-    if(strcmp(current_token.class, "identificador")) {
-        followers = add_follow(parent_followers, convert("simb_igual"), 1);
-        error(input_file, transition_matrix, convert("identificador"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(convert("simb_igual"), 1);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "simb_igual"
-    if(strcmp(current_token.class, "simb_igual")) {
-        followers = add_follow(parent_followers, convert("numero"), 1);
-        error(input_file, transition_matrix, convert("simb_igual"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(convert("numero"), 1);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "numero"
-    if(strcmp(current_token.class, "numero")) {
-        followers = add_follow(parent_followers, hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
-        error(input_file, transition_matrix, convert("numero"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling mais_const
-    followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
-    mais_const(input_file, transition_matrix, followers);
-
-    // Checks if token is "simb_ponto_virgula"
-    if(strcmp(current_token.class, "simb_ponto_virgula")) {
-        followers = parent_followers;
-        error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
-    }
-    //printf("Saiu constante\n");
 }
 
 void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
@@ -244,53 +250,56 @@ void mais_const(FILE *input_file, Transition** transition_matrix, FirstFollowSet
             print_error("identificador"), 1);
             return;
         }*/
-    }
+    }else{
 
-    readToken(input_file, transition_matrix);
+        readToken(input_file, transition_matrix);
 
-    // Checks if token is "identificador"
-    if(strcmp(current_token.class, "identificador")) {
-        followers = add_follow(parent_followers, convert("simb_igual"), 1);
-        error(input_file, transition_matrix, convert("identificador"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(convert("simb_igual"), 1);
-            return;
+        // Checks if token is "identificador"
+        if(strcmp(current_token.class, "identificador")) {
+            followers = add_follow(parent_followers, convert("simb_igual"), 1);
+            error(input_file, transition_matrix, convert("identificador"), 1, followers);
+            // Checks if follower found belongs to parent
+            if(is_in_follow_set(&parent_followers, current_token.class)) {
+                print_error(convert("simb_igual"), 1);
+                return;
+            }
+        }else{
+
+            readToken(input_file, transition_matrix);
+
+            // Checks if token is "simb_igual"
+            if(strcmp(current_token.class, "simb_igual")) {
+                followers = add_follow(parent_followers, convert("numero"), 1);
+                error(input_file, transition_matrix,convert( "simb_igual"), 1, followers);
+                // Checks if follower found belongs to parent
+                if(is_in_follow_set(&parent_followers, current_token.class)) {
+                    print_error(convert("numero"), 1);
+                    return;
+                }
+            }else{
+
+                readToken(input_file, transition_matrix);
+
+                // Checks if token is "numero"
+                if(strcmp(current_token.class, "numero")) {
+                    followers = add_follow(parent_followers, hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
+                    error(input_file, transition_matrix, convert("numero"), 1, followers);
+                    // Checks if follower found belongs to parent
+                    if(is_in_follow_set(&parent_followers, current_token.class)) {
+                        print_error(hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
+                        return;
+                    }
+                }else{
+                    readToken(input_file, transition_matrix);
+                    // Recursion, calling mais_const
+                    followers = parent_followers;
+                    mais_const(input_file, transition_matrix, followers);
+                    //printf("Saiu mais_const\n");
+                }
+            }
         }
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "simb_igual"
-    if(strcmp(current_token.class, "simb_igual")) {
-        followers = add_follow(parent_followers, convert("numero"), 1);
-        error(input_file, transition_matrix,convert( "simb_igual"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(convert("numero"), 1);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "numero"
-    if(strcmp(current_token.class, "numero")) {
-        followers = add_follow(parent_followers, hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
-        error(input_file, transition_matrix, convert("numero"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(hash_get("<mais_const>")->first, hash_get("<mais_const>")->firstCount);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling mais_const
-    followers = parent_followers;
-    mais_const(input_file, transition_matrix, followers);
-    //printf("Saiu mais_const\n");
+        
 }
 
 void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
@@ -309,34 +318,37 @@ void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
             print_error("identificador"), 1);
             return;
         }*/
-    }
+    }else{
 
-    readToken(input_file, transition_matrix);
+        readToken(input_file, transition_matrix);
 
-    // Checks if token is "identificador"
-    if(strcmp(current_token.class, "identificador")) {
-        followers = add_follow(parent_followers, hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
-        error(input_file, transition_matrix, convert("identificador"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
-            return;
+        // Checks if token is "identificador"
+        if(strcmp(current_token.class, "identificador")) {
+            followers = add_follow(parent_followers, hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
+            error(input_file, transition_matrix, convert("identificador"), 1, followers);
+            // Checks if follower found belongs to parent
+            if(is_in_follow_set(&parent_followers, current_token.class)) {
+                print_error(hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
+                return;
+            }
+        }else{
+
+            readToken(input_file, transition_matrix);
+
+            // Recursion, calling mais_var
+            followers = parent_followers;
+            mais_var(input_file, transition_matrix, followers);
+
+            // Checks if token is "simb_ponto_virgula"
+            if(strcmp(current_token.class, "simb_ponto_virgula")) {
+                followers = parent_followers;
+                error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
+            }else{
+                readToken(input_file, transition_matrix);
+            }
+        
         }
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling mais_var
-    followers = parent_followers;
-    mais_var(input_file, transition_matrix, followers);
-
-    // Checks if token is "simb_ponto_virgula"
-    if(strcmp(current_token.class, "simb_ponto_virgula")) {
-        followers = parent_followers;
-        error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
-    }
-
-    readToken(input_file, transition_matrix);
     //printf("Saiu variavel\n");
 }
 
@@ -369,14 +381,14 @@ void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
             print_error(hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
             return;
         }
+    }else{
+        readToken(input_file, transition_matrix);
+
+        // Recursion, calling mais_var
+        followers = parent_followers;
+        mais_var(input_file, transition_matrix, followers);
+        //printf("Saiu mais_var\n");
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling mais_var
-    followers = parent_followers;
-    mais_var(input_file, transition_matrix, followers);
-    //printf("Saiu mais_var\n");
 }
 
 void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
@@ -395,57 +407,61 @@ void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowS
             print_error("identificador"), 1);
             return;
         }*/
-    }
+    }else{
 
-    readToken(input_file, transition_matrix);
+        readToken(input_file, transition_matrix);
 
-    // Checks if token is "identificador"
-    if(strcmp(current_token.class, "identificador")) {
-        followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
-        error(input_file, transition_matrix, convert("identificador"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(convert("simb_ponto_virgula"), 1);
-            return;
+        // Checks if token is "identificador"
+        if(strcmp(current_token.class, "identificador")) {
+            followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
+            error(input_file, transition_matrix, convert("identificador"), 1, followers);
+            // Checks if follower found belongs to parent
+            if(is_in_follow_set(&parent_followers, current_token.class)) {
+                print_error(convert("simb_ponto_virgula"), 1);
+                return;
+            }
+        }else{
+
+            readToken(input_file, transition_matrix);
+
+            // Checks if token is "simb_ponto_virgula"
+            if(strcmp(current_token.class, "simb_ponto_virgula")) {
+                followers = add_follow(parent_followers, hash_get("<bloco>")->first, hash_get("<bloco>")->firstCount);
+                error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
+                // Checks if follower found belongs to parent
+                if(is_in_follow_set(&parent_followers, current_token.class)) {
+                    print_error(hash_get("<bloco>")->first, hash_get("<bloco>")->firstCount);
+                    return;
+                }
+            }else{
+
+                readToken(input_file, transition_matrix);
+
+                // Recursion, calling bloco
+                followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
+                bloco(input_file, transition_matrix, followers);
+
+                // Checks if token is "simb_ponto_virgula"
+                if(strcmp(current_token.class, "simb_ponto_virgula")) {
+                    followers = add_follow(parent_followers, hash_get("<procedimento>")->first, hash_get("<procedimento>")->firstCount);
+                    error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
+                    // Checks if follower found belongs to parent
+                    if(is_in_follow_set(&parent_followers, current_token.class)) {
+                        print_error(hash_get("<procedimento>")->first, hash_get("<procedimento>")->firstCount);
+                        return;
+                    }
+                }else{
+
+                    readToken(input_file, transition_matrix);
+
+                    // Recursion, calling procedimento
+                    followers = parent_followers;
+                    procedimento(input_file, transition_matrix, followers);
+                    //printf("Saiu procedimento\n");
+                }
+            }
         }
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Checks if token is "simb_ponto_virgula"
-    if(strcmp(current_token.class, "simb_ponto_virgula")) {
-        followers = add_follow(parent_followers, hash_get("<bloco>")->first, hash_get("<bloco>")->firstCount);
-        error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(hash_get("<bloco>")->first, hash_get("<bloco>")->firstCount);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling bloco
-    followers = add_follow(parent_followers, convert("simb_ponto_virgula"), 1);
-    bloco(input_file, transition_matrix, followers);
-
-    // Checks if token is "simb_ponto_virgula"
-    if(strcmp(current_token.class, "simb_ponto_virgula")) {
-        followers = add_follow(parent_followers, hash_get("<procedimento>")->first, hash_get("<procedimento>")->firstCount);
-        error(input_file, transition_matrix, convert("simb_ponto_virgula"), 1, followers);
-        // Checks if follower found belongs to parent
-        if(is_in_follow_set(&parent_followers, current_token.class)) {
-            print_error(hash_get("<procedimento>")->first, hash_get("<procedimento>")->firstCount);
-            return;
-        }
-    }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling procedimento
-    followers = parent_followers;
-    procedimento(input_file, transition_matrix, followers);
-    //printf("Saiu procedimento\n");
 }
 
 void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
@@ -466,13 +482,14 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
                 print_error(hash_get("<expressao>")->first, hash_get("<expressao>")->firstCount);
                 return;
             }
+        }else{
+
+            readToken(input_file, transition_matrix);
+
+            // Recursion, calling expressao
+            followers = parent_followers;
+            expressao(input_file, transition_matrix, followers);
         }
-
-        readToken(input_file, transition_matrix);
-
-        // Recursion, calling expressao
-        followers = parent_followers;
-        expressao(input_file, transition_matrix, followers);
     }
     // Checks if token is "CALL"
     else if(!strcmp(current_token.class, "CALL")) {
@@ -522,13 +539,14 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
                 print_error(hash_get("<comando>")->first, hash_get("<comando>")->firstCount);
                 return;
             }
-        }
+        }else{
         
-        readToken(input_file, transition_matrix);
+            readToken(input_file, transition_matrix);
 
-        // Recursion, calling comando
-        followers = parent_followers;
-        comando(input_file, transition_matrix, followers);
+            // Recursion, calling comando
+            followers = parent_followers;
+            comando(input_file, transition_matrix, followers);
+        }
     }
     // Checks if token is "WHILE"
     else if(!strcmp(current_token.class, "WHILE")) {
@@ -547,13 +565,14 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
                 print_error(hash_get("<comando>")->first, hash_get("<comando>")->firstCount);
                 return;
             }
-        }
+        }else{
         
-        readToken(input_file, transition_matrix);
+            readToken(input_file, transition_matrix);
 
-        // Recursion, calling comando
-        followers = parent_followers;
-        comando(input_file, transition_matrix, followers);
+            // Recursion, calling comando
+            followers = parent_followers;
+            comando(input_file, transition_matrix, followers);
+        }
     }
     // Considers it lambda
     else {
@@ -579,18 +598,19 @@ void mais_cmd(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
             print_error(hash_get("<comando>")->first, hash_get("<comando>")->firstCount);
             return;
         }*/
+    }else{
+
+        readToken(input_file, transition_matrix);
+
+        // Recursion, calling comando
+        followers = add_follow(parent_followers, hash_get("<mais_cmd>")->first, hash_get("<mais_cmd>")->firstCount);
+        comando(input_file, transition_matrix, followers);
+
+        // Recursion, calling comando
+        followers = parent_followers;
+        mais_cmd(input_file, transition_matrix, followers);
+        //printf("Saiu mais_cmd\n");
     }
-
-    readToken(input_file, transition_matrix);
-
-    // Recursion, calling comando
-    followers = add_follow(parent_followers, hash_get("<mais_cmd>")->first, hash_get("<mais_cmd>")->firstCount);
-    comando(input_file, transition_matrix, followers);
-
-    // Recursion, calling comando
-    followers = parent_followers;
-    mais_cmd(input_file, transition_matrix, followers);
-    //printf("Saiu mais_cmd\n");
 }
 
 void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
