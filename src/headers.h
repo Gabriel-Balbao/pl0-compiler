@@ -44,7 +44,7 @@ typedef struct {
 } Data;
 
 // Defines for First/Follow tables
-// TODO: Adjust these values based on the actual number of non-terminals and terminals in the PL/0 grammar
+
 #define MAX_NON_TERMINALS 50
 #define MAX_TERMINALS 50
 

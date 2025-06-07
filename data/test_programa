@@ -1,4 +1,4 @@
-VAR n, fat;
+VAR ident, fat;
 PROCEDURE fatorial;
 BEGIN
 fat:=1;

@@ -65,11 +65,11 @@ int is_in_first_set(FirstFollowSet* data, const char *symbol) {
 void readToken(FILE *input_file, Transition** transition_matrix) {
     current_token = lexical_analyser(input_file, transition_matrix);
     if(current_token.end) {
-        printf("Unexpected end of file reached\n");
+        //printf("Unexpected end of file reached\n");
         exit(0);
     }
     if(current_token.is_error){
-        printf("Lexical error: %s - %s\n", current_token.token, current_token.class);
+       //printf("Lexical error: %s - %s\n", current_token.token, current_token.class);
     }else{
         strcat(capture_tokens, " ");
         strcat(capture_tokens, current_token.token);
@@ -120,7 +120,7 @@ void programa(FILE *input_file, Transition** transition_matrix) {
         error(input_file, transition_matrix, convert("simb_ponto"), 1, followers);
         // There isn't much to check in respect to this error
     }
-    //printf("Saiu programa\n");
+    //("Saiu programa\n");
 }
 
 void bloco(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
@@ -327,10 +327,11 @@ void variavel(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
             followers = add_follow(parent_followers, hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
             error(input_file, transition_matrix, convert("identificador"), 1, followers);
             // Checks if follower found belongs to parent
-            if(is_in_follow_set(&parent_followers, current_token.class)) {
-                print_error(hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
-                return;
-            }
+            // if(is_in_follow_set(&parent_followers, current_token.class)) {
+            //     print_error(hash_get("<mais_var>")->first, hash_get("<mais_var>")->firstCount);
+            //     return;
+            // }
+            return;
         }else{
 
             readToken(input_file, transition_matrix);
@@ -393,7 +394,7 @@ void mais_var(FILE *input_file, Transition** transition_matrix, FirstFollowSet p
 
 void procedimento(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    // printf("Entrou procedimento\n");
+    //printf("Entrou procedimento\n");
     FirstFollowSet followers;
 
     // Checks if token is "PROCEDURE"
@@ -576,7 +577,7 @@ void comando(FILE *input_file, Transition** transition_matrix, FirstFollowSet pa
     }
     // Considers it lambda
     else {
-      //  printf("Saiu comando\n");
+      //printf("Saiu comando\n");
         return;
     }
     //printf("Saiu comando\n");
@@ -634,7 +635,7 @@ void expressao(FILE *input_file, Transition** transition_matrix, FirstFollowSet 
 
 void operador_unario(FILE *input_file, Transition** transition_matrix, FirstFollowSet parent_followers) {
     free_token_capture();
-    //printf("Entrou operador_unario\n");
+   //printf("Entrou operador_unario\n");
     if(strcmp(current_token.class, "simb_mais") == 0)
         readToken(input_file, transition_matrix);
     else if(strcmp(current_token.class, "simb_menos") == 0)
