@@ -1,0 +1,13 @@
+VAR n, fat;
+	BGIN {erro em palavra chave}
+		n:=4;
+		{erro em identificador de variavel}
+		f@t:=1;
+		{erro operador relacional}
+		WHILE n=>1 DO
+			BEGIN
+			fat := fat * n;
+			n:=n-1;
+			END
+	{testando comentario nao fechado
+END.

@@ -1,7 +1,0 @@
-VAR n, fat;
-
-{meu programa bem legal}
-
-BEGIN
-	n := 4;
-END.

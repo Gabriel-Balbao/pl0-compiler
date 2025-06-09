@@ -2,8 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "headers.h"
 
+#include "headers.h"
+#include "grammar_sets.h"
+
+
+#define AUTOMATA_PATH "./state_machine/transition_matrix.csv"
 
 // Sets the list of reserved words
 static const char reserved_words[NUM_RESERVED_WORDS][MAX_RESERVED_WORD_LENGHT] = {
@@ -239,28 +243,28 @@ void main(int argc, char** argv){
 		exit(1);
 	}
 
-	hashTable = calloc(sizeof(HashNode*), HASH_SIZE);
-	// Insert FIRST and FOLLOW sets into the hash table
-    insert_first_follow();
+	char *file_name = argv[1]; // Get the file name
 
-	// Defines the input as the name of the input file
-	char *input_file_name = argv[1];
-	// Defines the automata transition table's file path
-	char automata_path[] = "./data/transition_matrix.csv";
-
-	printf("\n========== STARTING ANALYSIS! ========= \n\n");
-
-	Transition **transition_matrix = csv_parser(automata_path);
-
+	// Open the file
 	FILE *input_file;
-	input_file = fopen(input_file_name, "r");
+	input_file = fopen(file_name, "r");
 	if(input_file == NULL){
 		printf("Error: Unable to open input file!\n");
 		exit(1);
 	}
 
-	init_token_capture();
+	// For lexical analysis
+	Transition **transition_matrix = csv_parser(AUTOMATA_PATH);
 
-	// Starts syntatic analysis
-	syntatic_analyser(input_file_name, automata_path);
+	// For syntatic analysis
+	HashTable *first_follow_table = hash_create(); // Create first and follow table with hash structure
+	insert_first_follow(first_follow_table); // Populate first and follow table
+
+
+	// printf("\n========== STARTING ANALYSIS! ========= \n\n");
+
+	// init_token_capture();
+
+	// // Starts syntatic analysis
+	// syntatic_analyser(input_file_name, automata_path);
 }

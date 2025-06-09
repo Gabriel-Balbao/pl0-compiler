@@ -2,7 +2,7 @@
 
 ## Description
 
-This project implements a lexical analyzer (scanner) in C. It reads a source code file, processes it character by character, and groups sequences of characters into tokens.
+This project implements a lexical and syntatic analyzer (scanner) in C. It reads a source code file, processes it character by character, and groups sequences of characters into tokens.
 
 The analyzer uses a Deterministic Finite Automaton (DFA). The DFA's transition table is generated from a JFLAP (`.jff`) file using a Python script and stored in a CSV file (`../data/var.csv`). The C code then reads this CSV to perform the lexical analysis on the input source code.
 

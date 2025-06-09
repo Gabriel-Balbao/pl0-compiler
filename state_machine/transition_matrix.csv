@@ -1,0 +1,36 @@
+27,34
+state,symbol,num_outputs,outputs,next_state,next_state_is_final
+3,letra,1,letra,3,0
+3,digito,1,digito,3,0
+1,digito,1,digito,1,0
+0,},2,} <ERRO_COMENTARIO_MAL_FORMADO>,25,1
+0,>,1,>,10,0
+0,-,2,- simb_menos,18,1
+0,<,1,<,6,0
+0,=,2,= simb_igual,5,1
+13,=,2,= simb_atribuicao,15,1
+13,outro_:=,1,<ERRO_SIMBOLO_INCOMPLETO>,14,1
+6,=,2,= simb_menor_igual,7,1
+3,outro,1,identificador,4,1
+6,>,2,> simb_diferente,9,1
+0,tab,1,lambda,0,1
+23,outro_},1,lambda,23,0
+0,;,2,; simb_ponto_virgula,21,1
+0,+,2,+ simb_mais,19,1
+0,espaco,1,lambda,0,1
+0,.,2,. simb_ponto,20,1
+0,*,2,* simb_mult,17,1
+1,nao_digito,1,numero,2,1
+0,letra,1,letra,3,0
+0,virgula,2,virgula simb_virgula,22,1
+0,invalido,1,<ERRO_CARACTERE_INVALIDO>,26,1
+0,:,1,:,13,0
+10,outro_=,1,simb_maior_que,11,1
+23,},1,lambda,24,1
+0,/,2,/ simb_div,16,1
+0,{,1,lambda,23,0
+10,=,2,= simb_maior_igual,12,1
+23,quebra_linha,2,{ <ERRO_COMENTARIO_MAL_FORMADO>,25,1
+6,outro_>_=,1,simb_menor_que,8,1
+0,quebra_linha,1,lambda,0,1
+0,digito,1,digito,1,0
